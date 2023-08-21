@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/login.css" />
+    <title>Signup</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="design">
+        <img src="/img/favicon.ico" alt="" />
+        <h1>CHATAPP</h1>
+      </div>
+      <div class="content">
+        <div class="cover">
+          <div class="form">
+            <h3 class="heading">Welcome To ChatApp!</h3>
+            <h3 class="secondary-heading">Register</h3>
+            <form>
+              <div class="name-input">
+                <label for="exampleInputname" class="form-label">Name*</label>
+                <input
+                  type="text"
+                  class="form-control fontsize"
+                  id="exampleInputname"
+                  aria-describedby="emailHelp"
+                  required
+                  placeholder="Enter your Full Name"
+                  name="username"
+                />
+              </div>
+              <div class="email-input">
+                <label for="exampleInputEmail1" class="form-label">Email*</label>
+                <input
+                  type="email"
+                  class="form-control fontsize"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  required
+                  placeholder="Enter your Email"
+                  name="email"
+                />
+              </div>
+              <div id="email-error"></div>
+              <div class="pass-input">
+                <label for="exampleInputPassword1" class="form-label">Password*</label>
+                <input
+                  type="password"
+                  class="form-control fontsize"
+                  id="exampleInputPassword1"
+                  required
+                  placeholder="6+ character"
+                  name="password"
+                />
+              </div>
+              <div id="password-error"></div>
+              <div class="pass-reinput">
+                <label for="exampleInputPassword2" class="form-label">Confirm Password*</label>
+                <input
+                  type="password"
+                  class="form-control fontsize"
+                  id="exampleInputPassword2"
+                  required
+                  placeholder="Confirm Password"
+                  name="conpassword"
+                  ;
+                />
+              </div>
+              <button type="submit" class="btn-submit">SIGN UP</button>
+              <br />
+              <div class="go-back">
+                <span class="account">Have an account? </span>
+                <a class="login" href="/login">SIGN IN</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const emailerror = document.getElementById("email-error");
+      const passworderror = document.getElementById("password-error");
+
+      const form = document.querySelector("form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        emailerror.innerHTML = "";
+        passworderror.innerHTML = "";
+        const username = form.username.value;
+        const email = form.email.value;
+        const password = form.password.value;
+        const conpassword = form.conpassword.value;
+        console.log(form.password.value);
+        console.log(form.conpassword.value);
+        try {
+          const res = await fetch("/signup", {
+            method: "POST",
+            body: JSON.stringify({ username: username, email: email, password: password, conpassword: conpassword }),
+            headers: { "Content-Type": "application/json" },
+          });
+          const data = await res.json();
+
+          if (data.error) {
+            emailerror.innerHTML = data.error.email;
+            passworderror.innerHTML = data.error.password;
+          }
+          if (data.user) {
+            location.assign("/login");
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    </script>
+  </body>
+</html>
